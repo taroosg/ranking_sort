@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>result</title>
+</head>
+
+<body>
+  <div id="title"></div>
+  <ul id="output"></ul>
+
+  <script src="https://www.gstatic.com/firebasejs/6.3.1/firebase.js"></script>
+  <script src="js/script.js"></script>
+  <script>
+    db.collection('ranking-sort').doc(location.search.slice(3))
+      .onSnapshot(function (querySnapshot) {
+        const entry = querySnapshot.data().entry;
+        const resultArr = querySnapshot.data().voted.map(x => x.voted);
+        let totalArr = [...new Array(resultArr[0].length).fill(0)];
+        resultArr.forEach(elm => {
+          totalArr = totalArr.map((x, index) => { return x + elm[index] });
+        });
+        document.getElementById('title').innerHTML = `<p>${querySnapshot.data().title}</p>`
+        document.getElementById('output').innerHTML = totalArr.map((x, index) => `<li>${entry[index]}:${x}</li>`).join('');
+      });
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>index</title>
+</head>
+
+<body>
+  <input type="text" id="title" placeholder="title">
+  <input type="number" id="members" placeholder="members" min="2">
+  <button id="input">input</button>
+  <form action="" id="form">
+  </form>
+  <button id="send" type="button">send</button>
+  <div id="link"></div>
+  <div id="qrcode"></div>
+
+  <script src="https://www.gstatic.com/firebasejs/6.3.1/firebase.js"></script>
+  <script src="js/script.js"></script>
+  <script>
+    document.getElementById('input').addEventListener('click', function () {
+      document.getElementById('form').innerHTML = [...new Array(Number(document.getElementById('members').value)).fill(`<div><input type="text" placeholder="member"></div>`)].join('');
+    });
+
+    document.getElementById('send').addEventListener('click', function () {
+      var obj = {
+        entry: [...document.forms.form].map(x => x.value).slice(0, [...document.forms.form].length),
+        member: 1,
+        title: document.getElementById('title').value,
+        voted: []
+      };
+      db.collection('ranking-sort').add(obj)
+        .then(function (data) {
+          document.getElementById('link').innerHTML = `<a href="sort.html?q=${data.id}" target="_blank">link</a>`;
+          document.getElementById('qrcode').innerHTML = `<img class="alignnone" src="https://chart.googleapis.com/chart?cht=qr&chs=157x157&chco=000022&chl=sort.html?q=${data.id}" />`;
+        })
+        .catch(function (error) {
+          alert('error: ', error);
+        });
+    });
+
+  </script>
+
+</body>
+
+</html>

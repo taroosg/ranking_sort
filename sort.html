@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>sort</title>
+</head>
+
+<body>
+  <div id="title"></div>
+  <button id="send">send</button>
+  <ul id="list"></ul>
+  <div id="link"></div>
+  <div id="qrcode"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/6.3.1/firebase.js"></script>
+  <script src="js/script.js"></script>
+  <script>
+    db.collection('ranking-sort').doc(location.search.slice(3)).get()
+      .then(function (doc) {
+        let memberArr = doc.data().entry;
+        let resultArr = [...new Array(memberArr.length).keys()];
+        document.getElementById('title').innerHTML = `<p>${doc.data().title}</p>`
+        document.getElementById('list').innerHTML = memberArr.map((x, index) => `<li data-id="${x}">${x}</li>`).join('');
+        document.getElementById('qrcode').innerHTML = `<img class="alignnone" src="https://chart.googleapis.com/chart?cht=qr&chs=157x157&chco=000022&chl=sort.html?q=${doc.id}" />`;
+
+        let sortable = Sortable.create(list, {
+          group: "hoge",
+          animation: 100,
+          store: {
+            get: function (sortable) {
+              // var order = memberArr;
+              // return order ? order.split('|') : [];
+            },
+            set: function (sortable) {
+              const rankArr = sortable.toArray();
+              resultArr = memberArr.map(x => rankArr.indexOf(x));
+            }
+          }
+        });
+
+        document.getElementById('send').addEventListener('click', function () {
+          const N = 16;
+          const obj = {
+            id: btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(N)))).substring(0, N),
+            voted: resultArr.map(x => memberArr.length - 1 - x)
+          };
+          db.collection('ranking-sort').doc(location.search.slice(3)).update({
+            voted: firebase.firestore.FieldValue.arrayUnion(obj)
+          }).then(function () {
+            document.getElementById('link').innerHTML = `<a href="result.html${location.search}" target="_blank">link</a>`;
+          });
+        });
+
+      });
+
+  </script>
+
+</body>
+
+</html>
