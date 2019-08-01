@@ -21,6 +21,26 @@
   <script src="https://www.gstatic.com/firebasejs/6.3.1/firebase.js"></script>
   <script src="js/script.js"></script>
   <script>
+    const inputArray = [];
+    const konamiCommand = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65];
+
+    document.addEventListener('keyup', function (e) {
+      console.log(e.keyCode);
+      inputArray.push(e.keyCode);
+      switch (inputArray.toString().includes(konamiCommand)) {
+        case false:
+          return false;
+          break;
+
+        default:
+          inputArray.splice(0, inputArray.length - 1);
+          const url = location.host;
+          console.log(`${location.host}/delete.html`);
+          document.getElementById('link').innerHTML = `<a href="/delete.html" target="_blank">delete</a>`;
+          break;
+      }
+    });
+
     document.getElementById('input').addEventListener('click', function () {
       document.getElementById('form').innerHTML = [...new Array(Number(document.getElementById('members').value)).fill(`<div><input type="text" placeholder="member"></div>`)].join('');
     });
@@ -34,8 +54,8 @@
       };
       db.collection('ranking-sort').add(obj)
         .then(function (data) {
-          document.getElementById('link').innerHTML = `<a href="sort.html?q=${data.id}" target="_blank">link</a>`;
-          document.getElementById('qrcode').innerHTML = `<img class="alignnone" src="https://chart.googleapis.com/chart?cht=qr&chs=157x157&chco=000022&chl=sort.html?q=${data.id}" />`;
+          document.getElementById('link').innerHTML = `<a href="/sort.html?q=${data.id}" target="_blank">link</a>`;
+          document.getElementById('qrcode').innerHTML = `<img class="alignnone" src="https://chart.googleapis.com/chart?cht=qr&chs=157x157&chco=000022&chl=${location.host}/sort.html?q=${data.id}" />`;
         })
         .catch(function (error) {
           alert('error: ', error);

@@ -25,7 +25,7 @@
         let resultArr = [...new Array(memberArr.length).keys()];
         document.getElementById('title').innerHTML = `<p>${doc.data().title}</p>`
         document.getElementById('list').innerHTML = memberArr.map((x, index) => `<li data-id="${x}">${x}</li>`).join('');
-        document.getElementById('qrcode').innerHTML = `<img class="alignnone" src="https://chart.googleapis.com/chart?cht=qr&chs=157x157&chco=000022&chl=sort.html?q=${doc.id}" />`;
+        document.getElementById('qrcode').innerHTML = `<img class="alignnone" src="https://chart.googleapis.com/chart?cht=qr&chs=157x157&chco=000022&chl=${location.host}/sort.html?q=${doc.id}" />`;
 
         let sortable = Sortable.create(list, {
           group: "hoge",
@@ -51,7 +51,7 @@
           db.collection('ranking-sort').doc(location.search.slice(3)).update({
             voted: firebase.firestore.FieldValue.arrayUnion(obj)
           }).then(function () {
-            document.getElementById('link').innerHTML = `<a href="result.html${location.search}" target="_blank">link</a>`;
+            document.getElementById('link').innerHTML = `<a href="/result.html${location.search}" target="_blank">link</a>`;
           });
         });
 
