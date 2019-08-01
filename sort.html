@@ -51,7 +51,7 @@
           db.collection('ranking-sort').doc(location.search.slice(3)).update({
             voted: firebase.firestore.FieldValue.arrayUnion(obj)
           }).then(function () {
-            document.getElementById('link').innerHTML = `<a href="/ranking_sort/result.html${location.search}" target="_blank">link</a>`;
+            document.getElementById('link').innerHTML = `<a href="/ranking_sort/result.html${location.search}">link</a>`;
           });
         });
 
