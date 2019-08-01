@@ -36,7 +36,7 @@
           inputArray.splice(0, inputArray.length - 1);
           const url = location.host;
           console.log(`${location.host}/delete.html`);
-          document.getElementById('link').innerHTML = `<a href="/delete.html" target="_blank">delete</a>`;
+          document.getElementById('link').innerHTML = `<a href="/ranking-sort/delete.html" target="_blank">delete</a>`;
           break;
       }
     });
@@ -54,8 +54,8 @@
       };
       db.collection('ranking-sort').add(obj)
         .then(function (data) {
-          document.getElementById('link').innerHTML = `<a href="/sort.html?q=${data.id}" target="_blank">link</a>`;
-          document.getElementById('qrcode').innerHTML = `<img class="alignnone" src="https://chart.googleapis.com/chart?cht=qr&chs=157x157&chco=000022&chl=${location.host}/sort.html?q=${data.id}" />`;
+          document.getElementById('link').innerHTML = `<a href="/ranking-sort/sort.html?q=${data.id}" target="_blank">link</a>`;
+          document.getElementById('qrcode').innerHTML = `<img class="alignnone" src="https://chart.googleapis.com/chart?cht=qr&chs=157x157&chco=000022&chl=${location.host}/ranking-sort/sort.html?q=${data.id}" />`;
         })
         .catch(function (error) {
           alert('error: ', error);
